@@ -1,5 +1,7 @@
 import React,{Component} from 'react';
-
+import Axios from 'axios';
+import TableBody from './TableBody';
+import TableHeader from "./TableHeader";
 
 class DataGrid extends Component {
     constructor(props){
@@ -13,40 +15,26 @@ class DataGrid extends Component {
         }
     }
 
-    componenetDidMount(props){
-
+    componentDidMount() {
+        // console.log(this.url);
+        Axios.get(this.url).then(res =>{
+            // console.log(res.data);
+            this.setState({data : res.data});
+        }).catch(error => {
+            this.setState({error : true});
+        });
     }
 
+   
     render(){
+        //console.log(this.state);
+
+        const tableData = this.state.data;
         return (
             <table className="table">
-            <thead>
-                <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">First</th>
-                    <th scope="col">Last</th>
-                    <th scope="col">Handle</th>
-                </tr>
-            </thead>
+                <TableHeader columns={this.columns}></TableHeader>
             <tbody>
-                <tr>
-                    <th scope="row">1</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                </tr>
-                <tr>
-                    <th scope="row">2</th>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                    <td>@fat</td>
-                </tr>
-                <tr>
-                    <th scope="row">3</th>
-                    <td>Larry</td>
-                    <td>the Bird</td>
-                    <td>@twitter</td>
-                </tr>
+                <TableBody data={tableData}></TableBody>
             </tbody>
             </table>
         );
