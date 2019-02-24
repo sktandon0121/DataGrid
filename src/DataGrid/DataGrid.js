@@ -2,16 +2,19 @@ import React,{Component} from 'react';
 import Axios from 'axios';
 import TableBody from './TableBody';
 import TableHeader from "./TableHeader";
+import InputForm from './InputForm';
+import ReactDOMServer from 'react-dom/server';
 
 class DataGrid extends Component {
     constructor(props){
         super(props);
         this.url = props.url;
         this.columns = props.columns;
-
+       
         this.state = {
             error : false,
-            data : []
+            data : [],
+            showForm : false
         }
     }
 
@@ -25,6 +28,16 @@ class DataGrid extends Component {
         });
     }
 
+    nameChangeHandler = (e) => {
+        console.log(this.state);
+        console.log('skdkkd');
+    }
+    cellInputForm = (e) => {
+        console.log(e.target.innerText);
+        e.target.innerHTML = ReactDOMServer.renderToStaticMarkup(<InputForm data={e.target.innerText} change={this.nameChangeHandler} id={e.target.getAttribute('field-name')} />);
+        
+        
+    }
    
     render(){
         //console.log(this.state);
@@ -34,7 +47,7 @@ class DataGrid extends Component {
             <table className="table">
                 <TableHeader columns={this.columns}></TableHeader>
             <tbody>
-                <TableBody data={tableData}></TableBody>
+                    <TableBody data={tableData} show={this.state.showForm} handle={this.cellInputForm}></TableBody>
             </tbody>
             </table>
         );
